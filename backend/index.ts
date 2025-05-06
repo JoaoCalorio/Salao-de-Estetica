@@ -80,7 +80,11 @@ app.get('/cliente/:cpf', (req, res) => {
       return res.status(500).json({ erro: 'Erro ao processar os dados' });
     }
 
-    const usuario = usuarios.find((u) => u.cpf === cpf);
+    const usuario = usuarios.find((u) => {
+      const cpfUsuario = u.cpf.replace(/[^\d]/g, '');
+      const cpfParam = cpf.replace(/[^\d]/g, '');
+      return cpfUsuario === cpfParam;
+    });
 
     if (usuario) {
       res.status(200).json(usuario);
@@ -89,6 +93,7 @@ app.get('/cliente/:cpf', (req, res) => {
     }
   });
 });
+
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

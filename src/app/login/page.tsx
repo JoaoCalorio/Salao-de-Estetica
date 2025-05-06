@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [erro, setErro] = useState('');
   const router = useRouter();
 
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -22,6 +23,7 @@ export default function LoginPage() {
       setErro('Usuário ou senha incorretos');
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
