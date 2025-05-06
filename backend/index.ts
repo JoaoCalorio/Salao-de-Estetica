@@ -13,75 +13,79 @@ app.use(bodyParser.json());
 
 // Interface para os dados do usuário
 interface Usuario {
-  nome: string;
-  email: string;
-  senha: string;
+  nomeCompleto: string;
+  idade: string;
   cpf: string;
-  nascimento: string;
+  rg: string;
+  descricao: string;
 }
 
-// Endpoint para cadastro
 app.post('/cadastro', (req, res) => {
   const novoUsuario: Usuario = req.body;
 
-  console.log('Recebido no backend:', novoUsuario); // Log dos dados recebidos
+  console.log('Recebido no backend:', novoUsuario);
 
   fs.readFile(DATA_PATH, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Erro ao ler o arquivo:', err); // Log de erro ao ler o arquivo
+    if (err && err.code !== 'ENOENT') {
+      console.error('Erro ao ler o arquivo:', err);
       return res.status(500).json({ erro: 'Erro ao ler o arquivo' });
     }
 
     let usuarios: Usuario[] = [];
 
     try {
-      usuarios = JSON.parse(data); // Parse do arquivo JSON
+      if (data) usuarios = JSON.parse(data);
     } catch (parseError) {
-      console.error('Erro ao parsear o arquivo:', parseError); // Log de erro no parse
+      console.error('Erro ao parsear o arquivo:', parseError);
       return res.status(500).json({ erro: 'Erro ao processar os dados' });
     }
 
-    usuarios.push(novoUsuario); // Adiciona o novo usuário ao array de usuários
+    // Verifica se o CPF já existe
+    const cpfExistente = usuarios.some((u) => u.cpf === novoUsuario.cpf);
+    if (cpfExistente) {
+      return res.status(400).json({ erro: 'CPF já cadastrado' });
+    }
+
+    usuarios.push(novoUsuario);
 
     fs.writeFile(DATA_PATH, JSON.stringify(usuarios, null, 2), (err) => {
       if (err) {
-        console.error('Erro ao salvar no arquivo:', err); // Log de erro ao escrever no arquivo
+        console.error('Erro ao salvar no arquivo:', err);
         return res.status(500).json({ erro: 'Erro ao salvar o arquivo' });
       }
 
-      console.log('Usuário adicionado com sucesso!'); // Log de sucesso ao salvar
+      console.log('Usuário adicionado com sucesso!');
       res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso!' });
     });
   });
 });
 
-// Endpoint para login
-app.post('/login', (req, res) => {
-  const { email, senha }: { email: string; senha: string } = req.body;
+
+// Endpoint para buscar um usuário pelo CPF
+app.get('/cliente/:cpf', (req, res) => {
+  const { cpf } = req.params;
 
   fs.readFile(DATA_PATH, 'utf8', (err, data) => {
     if (err) {
-      console.error('Erro ao ler o arquivo:', err); // Log de erro ao ler o arquivo
+      console.error('Erro ao ler o arquivo:', err);
       return res.status(500).json({ erro: 'Erro ao ler o arquivo' });
     }
 
     let usuarios: Usuario[] = [];
 
     try {
-      usuarios = JSON.parse(data); // Parse do arquivo JSON
+      usuarios = JSON.parse(data);
     } catch (parseError) {
-      console.error('Erro ao parsear o arquivo:', parseError); // Log de erro no parse
+      console.error('Erro ao parsear o arquivo:', parseError);
       return res.status(500).json({ erro: 'Erro ao processar os dados' });
     }
 
-    const usuarioEncontrado = usuarios.find((u) => u.email === email && u.senha === senha);
+    const usuario = usuarios.find((u) => u.cpf === cpf);
 
-    if (usuarioEncontrado) {
-      console.log('Login realizado com sucesso!'); // Log de sucesso ao fazer login
-      res.status(200).json({ mensagem: 'Login realizado com sucesso!' });
+    if (usuario) {
+      res.status(200).json(usuario);
     } else {
-      console.log('Usuário ou senha incorretos'); // Log de erro ao fazer login
-      res.status(401).json({ erro: 'Usuário ou senha incorretos' });
+      res.status(404).json({ erro: 'Usuário não encontrado' });
     }
   });
 });
