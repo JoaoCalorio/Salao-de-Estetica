@@ -40,7 +40,7 @@ export default function BuscarCliente() {
     }
 
     try {
-      const resposta = await fetch(`http://localhost:3001/cliente/${cpfLimpo}`);
+      const resposta = await fetch(`https://projetin-nal5.onrender.com/buscacpf/${cpfLimpo}`);
       const data = await resposta.json();
 
       if (resposta.ok) {

@@ -71,7 +71,7 @@ export default function InformacoesClientes() {
     }
 
     try {
-      const resposta = await fetch('http://localhost:3001/cadastro', {
+      const resposta = await fetch('https://projetin-nal5.onrender.com/cadastro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
