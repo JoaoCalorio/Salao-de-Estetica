@@ -1,8 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 
 export default function BuscarCliente() {
+  const router = useRouter();
   const [cpf, setCpf] = useState('');
   const [usuario, setUsuario] = useState<any>(null);
   const [erro, setErro] = useState('');
@@ -71,7 +74,12 @@ export default function BuscarCliente() {
               placeholder="Digite o CPF do cliente"
             />
           </div>
-
+          <button
+            onClick={() => router.push('/homepage')}
+            className="mt-4 w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 rounded-md transition-colors"
+          >
+            Voltar para a Home
+          </button>
           <button
             onClick={buscar}
             disabled={carregando}
@@ -79,6 +87,9 @@ export default function BuscarCliente() {
           >
             {carregando ? 'Buscando...' : 'Buscar'}
           </button>
+          
+
+          
 
           {erro && <p className="mt-4 text-red-600 text-center">{erro}</p>}
 

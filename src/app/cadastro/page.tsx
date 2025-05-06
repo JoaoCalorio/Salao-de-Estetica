@@ -213,6 +213,12 @@ export default function InformacoesClientes() {
               placeholder="Digite uma descrição"
             />
           </div>
+          <button
+            onClick={() => router.push('/homepage')}
+            className="mt-4 w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 rounded-md transition-colors"
+          >
+            Voltar para a Home
+          </button>
 
           <button
             type="submit"
