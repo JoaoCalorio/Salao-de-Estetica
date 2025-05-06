@@ -1,8 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function InformacoesClientes() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
   const [form, setForm] = useState({
     nomeCompleto: '',
     nascimento: '',
@@ -16,36 +20,29 @@ export default function InformacoesClientes() {
 
   const [mensagem, setMensagem] = useState('');
   const [erro, setErro] = useState('');
-  const [clientes, setClientes] = useState<any[]>([]);
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token !== 'admin-token') {
+      router.push('/login');
+    } else {
+      setLoading(false);
+    }
     document.title = 'Informações do cliente';
-    setClientes([
-      {
-        nomeCompleto: "joao",
-        email: "joao.calorio@gmail.com"
-      },
-      {
-        nomeCompleto: "Isabel",
-        email: "isabel.calorio@gmail.com"
-      }
-    ]);
-  }, []);
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Função para formatar o CPF
   const formatarCPF = (cpf: string) => {
-    cpf = cpf.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    cpf = cpf.replace(/\D/g, '');
     if (cpf.length <= 11) {
-      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); // Formata o CPF
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     }
     return cpf;
   };
 
-  // Função de validação de CPF
   function validarCPF(cpf: string): boolean {
     cpf = cpf.replace(/[^\d]+/g, '');
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
@@ -102,11 +99,12 @@ export default function InformacoesClientes() {
     }
   };
 
-  // Função para lidar com a mudança do CPF, formatando automaticamente
   const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valorFormatado = formatarCPF(e.target.value);
     setForm({ ...form, cpf: valorFormatado });
   };
+
+  if (loading) return null;
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -145,7 +143,7 @@ export default function InformacoesClientes() {
               type="text"
               name="cpf"
               value={form.cpf}
-              onChange={handleCPFChange}  // Chama a função de formatação aqui
+              onChange={handleCPFChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800"
               placeholder="Digite seu CPF"
