@@ -5,7 +5,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const DATA_PATH = path.join(__dirname, 'data', 'usuarios.json');
 
 app.use(cors());
@@ -95,6 +95,7 @@ app.get('/cliente/:cpf', (req, res) => {
 });
 
 
+
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
