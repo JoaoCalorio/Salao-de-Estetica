@@ -22,7 +22,7 @@ export default function InformacoesClientes() {
   const [erro, setErro] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
     if (token !== 'admin-token') {
       router.push('/login');
     } else {
@@ -72,7 +72,6 @@ export default function InformacoesClientes() {
 
     try {
       const resposta = await fetch('https://projetin-wp0d.onrender.com/cadastro', {
-
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -113,6 +112,7 @@ export default function InformacoesClientes() {
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Informações do cliente</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* inputs mantidos conforme seu código original */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
             <input
@@ -214,8 +214,10 @@ export default function InformacoesClientes() {
               placeholder="Digite uma descrição"
             />
           </div>
+
           <button
             onClick={() => router.push('/homepage')}
+            type="button"
             className="mt-4 w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 rounded-md transition-colors"
           >
             Voltar para a Home

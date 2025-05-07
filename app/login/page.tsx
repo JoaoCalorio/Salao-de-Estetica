@@ -9,13 +9,12 @@ export default function LoginPage() {
   const [erro, setErro] = useState('');
   const router = useRouter();
 
-  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (usuario === 'admin' && senha === 'teste123') {
-      // Define o cookie de autenticação sem o secure em desenvolvimento
-      document.cookie = 'authToken=admin-token; path=/; max-age=3600'; // O cookie dura 1 hora
+      // Armazena o token no localStorage (simples e eficaz para apps client-side)
+      localStorage.setItem('authToken', 'admin-token');
 
       // Redireciona para a homepage
       router.push('/homepage');
@@ -23,7 +22,6 @@ export default function LoginPage() {
       setErro('Usuário ou senha incorretos');
     }
   };
-  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
