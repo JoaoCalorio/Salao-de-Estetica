@@ -13,10 +13,9 @@ export default function LoginPage() {
     e.preventDefault();
 
     if (usuario === 'admin' && senha === 'teste123') {
-      // Armazena o token no localStorage (simples e eficaz para apps client-side)
-      localStorage.setItem('authToken', 'admin-token');
-
-      // Redireciona para a homepage
+      // Salva no cookie (visível pelo middleware)
+      document.cookie = 'authToken=admin-token; path=/';
+    
       router.push('/homepage');
     } else {
       setErro('Usuário ou senha incorretos');

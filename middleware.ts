@@ -31,5 +31,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/homepage', '/buscacpf', '/cadastro'],  
+  matcher: ['/homepage', '/buscacpf', '/cadastro', '/deletausuario'],  
 };
