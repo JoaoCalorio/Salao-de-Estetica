@@ -16,6 +16,7 @@ export default function InformacoesClientes() {
     telefone: '',
     valor: '',
     descricao: '',
+    cadastrandoPor: '', // Adicionei o campo para quem está cadastrando
   });
 
   const [mensagem, setMensagem] = useState('');
@@ -31,7 +32,7 @@ export default function InformacoesClientes() {
     document.title = 'Informações do cliente';
   }, [router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -90,6 +91,7 @@ export default function InformacoesClientes() {
           telefone: '',
           valor: '',
           descricao: '',
+          cadastrandoPor: '', // Resetando o campo
         });
       } else {
         setErro(data.erro || 'Erro ao cadastrar.');
@@ -112,7 +114,6 @@ export default function InformacoesClientes() {
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Informações do cliente</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* inputs mantidos conforme seu código original */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome completo</label>
             <input
@@ -213,6 +214,22 @@ export default function InformacoesClientes() {
               className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800"
               placeholder="Digite uma descrição"
             />
+          </div>
+
+          {/* Campo para escolher quem está cadastrando */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Quem está cadastrando?</label>
+            <select
+              name="cadastrandoPor"
+              value={form.cadastrandoPor}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800"
+            >
+              <option value="">Selecione</option>
+              <option value="Éverton">Éverton</option>
+              <option value="Mariete">Mariete</option>
+            </select>
           </div>
 
           <button
