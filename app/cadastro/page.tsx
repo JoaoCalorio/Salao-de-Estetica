@@ -16,7 +16,7 @@ export default function InformacoesClientes() {
     telefone: '',
     valor: '',
     descricao: '',
-    cadastrandoPor: '', // Adicionei o campo para quem está cadastrando
+    cadastrandoPor: '',
   });
 
   const [mensagem, setMensagem] = useState('');
@@ -91,7 +91,7 @@ export default function InformacoesClientes() {
           telefone: '',
           valor: '',
           descricao: '',
-          cadastrandoPor: '', // Resetando o campo
+          cadastrandoPor: ''
         });
       } else {
         setErro(data.erro || 'Erro ao cadastrar.');
@@ -216,7 +216,7 @@ export default function InformacoesClientes() {
             />
           </div>
 
-          {/* Campo para escolher quem está cadastrando */}
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Quem está cadastrando?</label>
             <select
